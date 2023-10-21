@@ -1,67 +1,8 @@
-.standings {
-  display: grid;
-  column-gap: 0.5rem;
-  grid-template-columns: 1fr;
-  justify-content: space-around;
+table thead {
+    background-color: unset;
+    color: unset;
 }
 
-.player-card {
-  margin: 0.5rem;
-  border: 1px solid var(--color-bg-secondary);
-  border-radius: 0.25rem;
-  padding: 0.5rem;
-  display: grid;
-  align-items: center;
+table td {
+    padding: 0.4rem 0.2rem;
 }
-
-.player-card .toggle {
-  display: flex;
-  justify-content: space-around;
-}
-
-.primary {
-  display: flex;
-  justify-content: space-between;
-}
-
-.secondary {
-  display: flex;
-}
-
-.secondary div {
-  display: flex;
-  flex-grow: 1;
-  flex-basis: 0;
-  flex-direction: column;
-}
-
-.record {
-  align-items: flex-start;
-}
-
-.res {
-  align-items: center;
-}
-
-.res2 {
-  align-items: flex-end;
-}
-
-.schedule {
-  display: none;
-}
-
-.expand .schedule {
-  display: grid;
-  grid-template-columns: repeat(3, max-content);
-  justify-content: space-evenly;
-}
-
-.schedule h2 {
-  grid-column: span 3;
-}
-
-button {
-  padding: 0.4rem 0.8rem;
-}
-

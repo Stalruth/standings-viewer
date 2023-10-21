@@ -4,7 +4,7 @@ export let year = '2024';
 </script>
 
 <ul>
-  {#each tournaments as tournament}
+  {#each tournaments.reverse() as tournament}
     <li>
       <a href={`${year}/${tournament.id}`}>{tournament.name}</a> (<a href={`${year}/${tournament.id}/juniors`}>Juniors</a>, <a href={`${year}/${tournament.id}/seniors`}>Seniors</a>, <a href={`${year}/${tournament.id}/masters`}>Masters</a>)
     </li>
