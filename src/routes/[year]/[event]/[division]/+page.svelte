@@ -31,6 +31,17 @@ function toggleExpand(e) {
   console.log(playerIsExpanded);
 }
 
+function getResult(result) {
+  if (result === 'W') {
+    return 'Win';
+  } else if (result === 'L') {
+    return 'Loss';
+  } else if (result === 'T') {
+    return 'Tie';
+  }
+  return 'Ongoing';
+}
+
 </script>
 
 <svelte:head>
@@ -92,7 +103,7 @@ function toggleExpand(e) {
         {#each Object.keys(player.rounds) as round}
           <tr>
             <td>{round}</td>
-            <td>{player.rounds[round].result}</td>
+            <td>{getResult(player.rounds[round].result)}</td>
             <td>{player.rounds[round].name}</td>
           </tr>
         {/each}
