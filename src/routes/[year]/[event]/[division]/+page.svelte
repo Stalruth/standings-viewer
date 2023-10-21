@@ -17,7 +17,12 @@ async function getTournamentInfo(year: string, eventId: string) {
 }
 
 let standings = [];
-let tournamentInfo = {"name": `${year} ${eventId}`};
+let tournamentInfo = {
+  "name": `${year} ${eventId}`,
+  "lastUpdated": "1970-01-01 00:00:00.000000",
+};
+
+$: lastUpdated = new Date(tournamentInfo.lastUpdated);
 
 onMount(async () => {
   tournamentInfo = await getTournamentInfo(year, eventId);
@@ -62,7 +67,7 @@ function getResult(result) {
   </ul>
 </details>
 
-<p>There are {tournamentInfo.players?.[division] ?? 'a couple'} players competing in this tournament.</p>
+<p>There are {tournamentInfo.players?.[division] ?? 'a couple'} players competing in this tournament. This page was last updated at {lastUpdated.toLocaleString()}.</p>
 
 <div class="standings">
   <div class="label-desktop">Rank</div>
