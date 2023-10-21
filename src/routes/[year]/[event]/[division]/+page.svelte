@@ -82,7 +82,7 @@ function getResult(result) {
     <div class="name">{player.name}</div>
     <div>
       <div class="label-mobile">Record:</div>
-      <div>{player.record.wins}-{player.record.losses}</div>
+      <div>{player.record.wins}-{player.record.losses}-{player.record.ties}</div>
     </div>
     <div>
       <div class="label-mobile">Opp Win%:</div>
