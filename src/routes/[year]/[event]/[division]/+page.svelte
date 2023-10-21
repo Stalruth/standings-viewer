@@ -77,7 +77,7 @@ function toggleExpand(e) {
       <div>{(player.resistances.oppopp * 100).toFixed(2)}%</div>
     </div>
     <div class="schedule-button">
-      <button on:click={toggleExpand} data-player={player.placing}>View Run</button>
+      <button on:click={toggleExpand} data-player={player.placing}>{!!playerIsExpanded[player.placing] ? 'Hide' : 'Show'} Run</button>
     </div>
     <div class="schedule" class:expanded={!!playerIsExpanded[player.placing]}>
       <table>
@@ -100,6 +100,7 @@ function toggleExpand(e) {
       </table>
     </div>
   </div>
+  <hr class="label-mobile">
   {/each}
 </div>
 
@@ -143,6 +144,11 @@ function toggleExpand(e) {
 
 .label-desktop {
   display: none;
+}
+
+hr {
+  grid-column: 1 / -1;
+  margin: 0.5rem 0;
 }
 
 @media screen and (min-width: 50rem) {
