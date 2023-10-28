@@ -1,25 +1,21 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-
 export let data;
 const year = data.year;
 const eventId = data.eventId;
+const tournamentInfo = data.tournamentInfo;
 
 async function getTournamentInfo(year: string, eventId: string) {
   const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/tournament.json`);
   return await response.json();
 }
 
-let tournamentInfo = {"name": `${year} ${eventId}`};
-
-onMount(async () => {
-  tournamentInfo = await getTournamentInfo(year, eventId);
-});
-
 </script>
 
 <svelte:head>
-  <link rel="preload" href={`https://api.standings.stalruth.dev/${year}/${eventId}/tournament.json`} as="fetch" crossorigin />
+  <title>Select Division: {tournamentInfo.name} Homemade Standings</title>
+  <meta property="og:title" content="Select Division: {tournamentInfo.name} Homemade Standings" />
+  <meta property="og:url" content="https://standings.stalruth.dev/" />
+  <meta property="og:description" content="Homemade standings for the {tournamentInfo.name}." />
 </svelte:head>
 
 <h1>{tournamentInfo.name}</h1>

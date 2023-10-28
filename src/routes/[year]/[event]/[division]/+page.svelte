@@ -5,6 +5,7 @@ export let data;
 const year = data.year;
 const eventId = data.eventId;
 const division = data.division;
+const tournamentInfo = data.tournamentInfo;
 
 async function getTournamentStandings(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters') {
   const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`);
@@ -17,15 +18,10 @@ async function getTournamentInfo(year: string, eventId: string) {
 }
 
 let standings = [];
-let tournamentInfo = {
-  "name": `${year} ${eventId}`,
-  "lastUpdated": "1970-01-01 00:00:00.000000",
-};
 
 $: lastUpdated = new Date(tournamentInfo.lastUpdated);
 
 onMount(async () => {
-  tournamentInfo = await getTournamentInfo(year, eventId);
   standings = await getTournamentStandings(year, eventId, division);
 });
 
@@ -33,7 +29,6 @@ const playerIsExpanded = {};
 
 function toggleExpand(e) {
   playerIsExpanded[e.target.attributes['data-player'].value] = !playerIsExpanded[e.target.attributes['data-player'].value];
-  console.log(playerIsExpanded);
 }
 
 function getResult(result) {
@@ -51,7 +46,10 @@ function getResult(result) {
 
 <svelte:head>
   <link rel="preload" href={`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`} as="fetch" crossorigin />
-  <link rel="preload" href={`https://api.standings.stalruth.dev/${year}/${eventId}/tournament.json`} as="fetch" crossorigin />
+  <title>{tournamentInfo.name} - {division[0].toUpperCase()}{division.substring(1)} Division Homemade Standings</title>
+  <meta property="og:title" content="{tournamentInfo.name} Homemade Standings" />
+  <meta property="og:url" content="https://standings.stalruth.dev/" />
+  <meta property="og:description" content="Homemade standings for the {tournamentInfo.name}." />
 </svelte:head>
 
 <h1>{tournamentInfo.name}</h1>
@@ -63,7 +61,7 @@ function getResult(result) {
   <ul>
     <li><a href={`https://rk9.gg/roster/${tournamentInfo.rk9link}`}>RK9 Roster</a></li>
     <li><a href={`https://rk9.gg/pairings/${tournamentInfo.rk9link}`}>RK9 Pairings</a></li>
-    <li><a href={`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`}>Unofficial JSON standings</a></li>
+    <li><a href={`https://api.standings.stalruth.dev/${year}/${eventId}/${division}/standings.json`}>Unofficial JSON standings</a></li>
   </ul>
 </details>
 

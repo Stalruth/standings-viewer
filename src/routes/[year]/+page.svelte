@@ -6,17 +6,15 @@ import TournamentList from '$lib/components/TournamentList.svelte';
 
 export let data;
 const year = data.year;
-
-let yearTournaments = [];
-
-onMount(async () => {
-  yearTournaments = await getYearData(year);
-});
+const yearTournaments = data.yearTournaments;
 
 </script>
 
 <svelte:head>
-  <link rel="preload" href={`https://api.standings.stalruth.dev/2024/tournaments.json`} as="fetch" crossorigin />
+  <title>VGC {year} Homemade Standings Index</title>
+  <meta property="og:title" content="VGC {year} Homemade Standings Index" />
+  <meta property="og:url" content="https://standings.stalruth.dev/" />
+  <meta property="og:description" content="Homemade standings for VGC {year} tournaments." />
 </svelte:head>
 
 <h1>Pokémon VGC 2024 Season Standings</h1>
