@@ -26,3 +26,7 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 2px solid var(--color-accent);
 }
 
+footer {
+  padding-top: 0;
+  border-top: 2px solid var(--color-accent);
+}
