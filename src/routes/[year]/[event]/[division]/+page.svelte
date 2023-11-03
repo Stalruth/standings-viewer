@@ -121,7 +121,7 @@ function getResult(result) {
 <style>
 .standings {
   display: grid;
-  grid-template-columns: repeat(3, max-content);
+  grid-template-columns: repeat(6, max-content);
   column-gap: 1rem;
   justify-content: space-around;
   align-items: baseline;
@@ -131,19 +131,14 @@ function getResult(result) {
   display: contents;
 }
 
-.name {
-  grid-column: 2 / -1;
-  max-width: 12rem;
-}
-
 .schedule-button {
-  grid-column: 1 / -1;
-  display: flex;
+  display: block;
   justify-content: center;
 }
 
 .schedule-button button {
   padding: 0.25rem;
+  margin: 0.25rem 0;
 }
 
 .schedule {
@@ -157,6 +152,10 @@ function getResult(result) {
 }
 
 .label-desktop {
+  display: block;
+}
+
+.label-mobile {
   display: none;
 }
 
@@ -165,26 +164,26 @@ hr {
   margin: 0.5rem 0;
 }
 
-@media screen and (min-width: 50rem) {
+@media (max-width: 50rem) {
   .standings {
-    grid-template-columns: repeat(6, max-content);
+    grid-template-columns: repeat(3, max-content);
   }
 
   .name {
-    grid-column: unset;
+    grid-column: 2 / -1;
   }
 
   .schedule-button {
-    grid-column: unset;
-    display: block;
+    grid-column: 1 / -1;
+    display: flex;
   }
 
   .label-desktop {
-    display: block;
+    display: none;
   }
 
   .label-mobile {
-    display: none;
+    display: block;
   }
 }
 </style>
