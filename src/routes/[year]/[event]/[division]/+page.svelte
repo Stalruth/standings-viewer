@@ -144,6 +144,10 @@ dialog {
   flex-direction: column;
 }
 
+dialog table thead {
+  top: calc(-1rem - 5px);
+}
+
 @media (max-width: 50rem) {
   .name {
     max-width: 12em;
