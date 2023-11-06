@@ -74,7 +74,7 @@ function getResult(result) {
 <table class="standings">
   <thead>
     <tr>
-      <th><span class="resistance">Rank</span></th>
+      <th><span class="rank-label">Rank</span></th>
       <th>Name</th>
       <th>Record</th>
       <th class="resistance">Resistance</th>
@@ -154,7 +154,7 @@ dialog table thead {
     white-space: break-spaces;
   }
 
-  .resistance {
+  .resistance, .rank-label {
     display: none;
   }
 }
