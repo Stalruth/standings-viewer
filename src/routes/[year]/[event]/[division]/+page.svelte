@@ -27,8 +27,12 @@ onMount(async () => {
 
 const playerIsExpanded = {};
 
-function toggleExpand(e) {
-  playerIsExpanded[e.target.attributes['data-player'].value] = !playerIsExpanded[e.target.attributes['data-player'].value];
+function openDialog(e) {
+  e.target.parentNode.nextElementSibling.showModal();
+}
+
+function closeDialog(e) {
+  e.target.parentNode.close();
 }
 
 function getResult(result) {
@@ -67,123 +71,87 @@ function getResult(result) {
 
 <p>There are {tournamentInfo.players?.[division] ?? 'a couple'} players competing in this tournament. This page was last updated at {lastUpdated.toLocaleString()}.</p>
 
-<div class="standings">
-  <div class="label-desktop">Rank</div>
-  <div class="label-desktop">Name</div>
-  <div class="label-desktop">Record</div>
-  <div class="label-desktop">Opp Win%</div>
-  <div class="label-desktop">Opp Opp Win%</div>
-  <div class="label-desktop"></div>
-  {#each standings as player}
-  <div class="player">
-    <div>{player.placing}</div>
-    <div class="name">{player.name}</div>
-    <div>
-      <div class="label-mobile">Record:</div>
-      <div>{player.record.wins}-{player.record.losses}-{player.record.ties}</div>
-    </div>
-    <div>
-      <div class="label-mobile">Opp Win%:</div>
-      <div>{(player.resistances.opp * 100).toFixed(2)}%</div>
-    </div>
-    <div>
-      <div class="label-mobile">Opp Opp Win%:</div>
-      <div>{(player.resistances.oppopp * 100).toFixed(2)}%</div>
-    </div>
-    <div class="schedule-button">
-      <button on:click={toggleExpand} data-player={player.placing}>{!!playerIsExpanded[player.placing] ? 'Hide' : 'Show'} Run</button>
-    </div>
-    <div class="schedule" class:expanded={!!playerIsExpanded[player.placing]}>
-      <table>
-        <thead>
-          <tr>
-            <td>R#</td>
-            <td>Result</td>
-            <td>Name</td>
-          </tr>
-        </thead>
-        <tbody>
-        {#each Object.keys(player.rounds) as round}
-          <tr>
-            <td>{round}</td>
-            <td>{getResult(player.rounds[round].result)}</td>
-            <td>{player.rounds[round].name}</td>
-          </tr>
-        {/each}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <hr class="label-mobile">
-  {/each}
-</div>
+<table class="standings">
+  <thead>
+    <tr>
+      <th><span class="resistance">Rank</span></th>
+      <th>Name</th>
+      <th>Record</th>
+      <th class="resistance">Resistance</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each standings as player}
+      <tr class="player">
+        <td>{player.placing}</td>
+        <td class="name">{player.name}</td>
+        <td>
+          {player.record.wins}-{player.record.losses}-{player.record.ties}
+        </td>
+        <td class="resistance">
+          {(player.resistances.opp * 100).toFixed(2)}%
+          <span class="oppopp">({(player.resistances.oppopp * 100).toFixed(2)}%)</span>
+        </td>
+        <td class="schedule-button">
+          <button on:click={openDialog} data-player={player.placing}>{!!playerIsExpanded[player.placing] ? 'Hide' : 'Show'} More</button>
+        </td>
+        <dialog class="schedule">
+          <table>
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Result</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            {#each Object.keys(player.rounds).reverse() as round}
+              <tr>
+                <td>{round}</td>
+                <td>{getResult(player.rounds[round].result)}</td>
+                <td class="name">{player.rounds[round].name}</td>
+              </tr>
+            {/each}
+            </tbody>
+          </table>
+          <button on:click={closeDialog}>Close</button>
+        </dialog>
+      </tr>
+    {/each}
+  </tbody>
+</table>
 
 <style>
 .standings {
-  display: grid;
-  grid-template-columns: repeat(6, max-content);
-  column-gap: 1rem;
-  justify-content: space-around;
-  align-items: baseline;
+  width: 100%;
 }
 
-.player {
-  display: contents;
-}
-
-.schedule-button {
-  display: block;
-  justify-content: center;
+.oppopp {
+  font-size: 0.85em;
 }
 
 .schedule-button button {
-  padding: 0.25rem;
-  margin: 0.25rem 0;
+  padding: 0.25em;
+  margin: 0;
 }
 
-.schedule {
-  grid-column: 1 / -1;
-  display: none;
-}
-
-.expanded.schedule {
+dialog[open] {
   display: flex;
-  justify-content: center;
 }
 
-.label-desktop {
-  display: block;
-}
-
-.label-mobile {
-  display: none;
-}
-
-hr {
-  grid-column: 1 / -1;
-  margin: 0.5rem 0;
+dialog {
+  flex-direction: column;
 }
 
 @media (max-width: 50rem) {
-  .standings {
-    grid-template-columns: repeat(3, max-content);
-  }
-
   .name {
-    grid-column: 2 / -1;
+    max-width: 12em;
+    white-space: break-spaces;
   }
 
-  .schedule-button {
-    grid-column: 1 / -1;
-    display: flex;
-  }
-
-  .label-desktop {
+  .resistance {
     display: none;
-  }
-
-  .label-mobile {
-    display: block;
   }
 }
 </style>
