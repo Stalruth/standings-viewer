@@ -3,6 +3,7 @@ export let data;
 const year = data.year;
 const eventId = data.eventId;
 const tournamentInfo = data.tournamentInfo;
+const showWinners = tournamentInfo?.winners?.juniors || tournamentInfo?.winners?.seniors || tournamentInfo?.winners?.masters;
 
 async function getTournamentInfo(year: string, eventId: string) {
   const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/tournament.json`);
@@ -20,14 +21,40 @@ async function getTournamentInfo(year: string, eventId: string) {
 
 <h1>{tournamentInfo.name}</h1>
 
-<ul>
-  <li>
-    <a href={`/${year}/${eventId}/juniors`}>Juniors ({tournamentInfo?.players?.['juniors'] ?? 'a couple'} players)</a>
-  </li>
-  <li>
-    <a href={`/${year}/${eventId}/seniors`}>Seniors ({tournamentInfo?.players?.['seniors'] ?? 'a few'} players)</a>
-  </li>
-  <li>
-    <a href={`/${year}/${eventId}/masters`}>Masters ({tournamentInfo?.players?.['masters'] ?? 'a lot of'} players)</a>
-  </li>
-</ul>
+<div class="container">
+  <table>
+    <thead>
+      <tr>
+        <th>Division</th>
+        <th>Players</th>
+        {#if showWinners}
+          <th>Winner</th>
+        {/if}
+      </tr>
+    </thead>
+    <tbody>
+      {#each ['Juniors', 'Seniors', 'Masters'] as division}
+        <tr>
+          <td>
+            <a href={`/${year}/${eventId}/${division.toLowerCase()}`}>{division}</a>
+          </td>
+          <td>{tournamentInfo?.players?.[division.toLowerCase()]}</td>
+          {#if showWinners}
+            <td>{tournamentInfo?.winners?.[division.toLowerCase()] ?? 'Ongoing'}</td>
+          {/if}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
+
+<style>
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  font-size: inherit;
+}
+</style>

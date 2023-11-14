@@ -1,51 +1,45 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 
+import { getFavouritesStore } from '$lib/favouritesStore.ts';
+import StandingsTable from './StandingsTable.svelte';
+
 export let data;
-const year = data.year;
-const eventId = data.eventId;
-const division = data.division;
-const tournamentInfo = data.tournamentInfo;
+let year = data.year;
+let eventId = data.eventId;
+let division = data.division;
+$: year = data.year;
+$: eventId = data.eventId;
+$: division = data.division;
+$: tournamentInfo = data.tournamentInfo;
+$: lastUpdated = new Date(tournamentInfo.lastUpdated);
+
+let standings = [];
 
 async function getTournamentStandings(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters') {
   const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`);
   return await response.json();
 }
 
-async function getTournamentInfo(year: string, eventId: string) {
-  const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/tournament.json`);
-  return await response.json();
+let favourites = [];
+let favouritesStore = getFavouritesStore(year, eventId, division);
+$: sortedFavourites = standings.filter(el => favourites.includes(el));
+
+function getFavouriteHandler(player) {
+  return function toggleFavourite(e) {
+    if (favourites.includes(player)) {
+      favourites = favourites.filter(el => el !== player);
+    } else {
+      favourites = [...favourites, player];
+    }
+    $favouritesStore = favourites.map(el => el.id);
+  }
 }
-
-let standings = [];
-
-$: lastUpdated = new Date(tournamentInfo.lastUpdated);
 
 onMount(async () => {
   standings = await getTournamentStandings(year, eventId, division);
+  favourites = standings.filter(el => $favouritesStore.includes(el.id));
 });
-
-const playerIsExpanded = {};
-
-function openDialog(e) {
-  e.target.parentNode.nextElementSibling.showModal();
-}
-
-function closeDialog(e) {
-  e.target.parentNode.close();
-}
-
-function getResult(result) {
-  if (result === 'W') {
-    return 'Win';
-  } else if (result === 'L') {
-    return 'Loss';
-  } else if (result === 'T') {
-    return 'Tie';
-  }
-  return 'Ongoing';
-}
-
 </script>
 
 <svelte:head>
@@ -69,93 +63,12 @@ function getResult(result) {
   </ul>
 </details>
 
-<p>There are {tournamentInfo.players?.[division] ?? 'a couple'} players competing in this tournament. This page was last updated at {lastUpdated.toLocaleString()}.</p>
+<p>There are {tournamentInfo.players?.[division] ?? 'a couple'} players competing in this tournament. This page was last updated at {lastUpdated?.toLocaleString() ?? 'at some point'}.</p>
 
-<table class="standings">
-  <thead>
-    <tr>
-      <th><span class="rank-label">Rank</span></th>
-      <th>Name</th>
-      <th>Record</th>
-      <th class="resistance">Resistance</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each standings as player}
-      <tr class="player">
-        <td>{player.placing}</td>
-        <td class="name">{player.name}</td>
-        <td>
-          {player.record.wins}-{player.record.losses}-{player.record.ties}
-        </td>
-        <td class="resistance">
-          {(player.resistances.opp * 100).toFixed(2)}%
-          <span class="oppopp">({(player.resistances.oppopp * 100).toFixed(2)}%)</span>
-        </td>
-        <td class="schedule-button">
-          <button on:click={openDialog} data-player={player.placing}>{!!playerIsExpanded[player.placing] ? 'Hide' : 'Show'} More</button>
-        </td>
-        <dialog class="schedule">
-          <table>
-            <thead>
-              <tr>
-                <th>Round</th>
-                <th>Result</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-            {#each Object.keys(player.rounds).reverse() as round}
-              <tr>
-                <td>{round}</td>
-                <td>{getResult(player.rounds[round].result)}</td>
-                <td class="name">{player.rounds[round].name}</td>
-              </tr>
-            {/each}
-            </tbody>
-          </table>
-          <button on:click={closeDialog}>Close</button>
-        </dialog>
-      </tr>
-    {/each}
-  </tbody>
-</table>
+{#if favourites.length > 0}
+  <h2>Favourites</h2>
+  <StandingsTable standings={sortedFavourites} getFavouriteHandler={getFavouriteHandler}  favourites={favourites} />
+{/if}
 
-<style>
-.standings {
-  width: 100%;
-}
-
-.oppopp {
-  font-size: 0.85em;
-}
-
-.schedule-button button {
-  padding: 0.25em;
-  margin: 0;
-}
-
-dialog[open] {
-  display: flex;
-}
-
-dialog {
-  flex-direction: column;
-}
-
-dialog table thead {
-  top: calc(-1rem - 5px);
-}
-
-@media (max-width: 50rem) {
-  .name {
-    max-width: 12em;
-    white-space: break-spaces;
-  }
-
-  .resistance, .rank-label {
-    display: none;
-  }
-}
-</style>
+<h2>Standings</h2>
+<StandingsTable standings={standings} getFavouriteHandler={getFavouriteHandler} favourites={favourites} />
