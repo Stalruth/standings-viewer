@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 
-import { getFavouritesStore } from '$lib/favouritesStore.ts';
+import { getFavouritesStore } from '$lib/favouritesStore.js';
 import StandingsTable from './StandingsTable.svelte';
 
 export let data;
