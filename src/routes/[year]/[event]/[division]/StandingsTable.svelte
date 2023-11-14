@@ -43,8 +43,8 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
           <td class="team-cell">
             {#each getTeamDisplay(player.team) as set}
               <span
-                title={set.species ?? 'No Data'}
-                style={Icons.getPokemon(set.species ?? 'No Data').style}
+                title={set ?? 'No Data'}
+                style={Icons.getPokemon(set ?? 'No Data').style}
               >
               </span>
             {/each}
