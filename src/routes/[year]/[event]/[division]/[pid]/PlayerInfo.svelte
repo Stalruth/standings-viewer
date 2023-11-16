@@ -186,7 +186,9 @@ function getTournamentStages(rounds, playerCount) {
         <tr>
           <th>Round</th>
           <th>Result</th>
-          <th>Name</th>
+          <th>
+            Name<span class="label-mobile">/Team</span>
+          </th>
           {#if stage.rounds.filter(el => el.team).length}
             <th class="team">Team</th>
           {/if}
@@ -207,7 +209,20 @@ function getTournamentStages(rounds, playerCount) {
             {#if round.id === 0}
               <b>{round.name}</b>
             {:else}
-              <a href="{round.id}">{round.name}</a>
+              <p>
+                <a href="{round.id}">{round.name}</a>
+              </p>
+              {#if round.team}
+                <p class="inline-team">
+                  {#each getTeamDisplay(round.team) as set}
+                    <span
+                      title={set ?? 'No Data'}
+                      style={Icons.getPokemon(set ?? 'No Data').style}
+                    >
+                    </span>
+                  {/each}
+                </p>
+              {/if}
             {/if}
           </td>
           {#if stage.rounds.filter(el => el.team).length}
@@ -236,6 +251,18 @@ function getTournamentStages(rounds, playerCount) {
 </div>
 
 <style>
+h2 {
+  margin: 0;
+}
+
+td p {
+  margin: 0;
+}
+
+.label-mobile, .inline-team {
+  display: none;
+}
+
 .player {
   display: flex;
   flex-direction: column;
@@ -251,9 +278,14 @@ function getTournamentStages(rounds, playerCount) {
   font-size: 0.85em;
 }
 
-@media (max-width: 50rem) {
+@media (max-width: 52.5rem) {
   .team {
     display: none;
+  }
+  .inline-team {
+    display: inline-grid;
+    grid-template-columns: repeat(6, min-content);
+    justify-content: center;
   }
 
   .name {
@@ -262,7 +294,9 @@ function getTournamentStages(rounds, playerCount) {
   }
 }
 
-h2 {
-  margin: 0;
+@media (max-width: 35rem) {
+  .inline-team {
+    grid-template-columns: repeat(3, min-content);
+  }
 }
 </style>

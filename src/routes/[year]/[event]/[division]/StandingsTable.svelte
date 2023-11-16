@@ -45,15 +45,17 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
           <p>
             <a href={`${document.URL}/${player.id}`}>{player.name}</a>
           </p>
-          <p class="inline-team">
-            {#each getTeamDisplay(player.team) as set}
-              <span
-                title={set ?? 'No Data'}
-                style={Icons.getPokemon(set ?? 'No Data').style}
-              >
-              </span>
-            {/each}
-          </p>
+          {#if hasTeams}
+            <p class="inline-team">
+              {#each getTeamDisplay(player.team) as set}
+                <span
+                  title={set ?? 'No Data'}
+                  style={Icons.getPokemon(set ?? 'No Data').style}
+                >
+                </span>
+              {/each}
+            </p>
+          {/if}
         </td>
         {#if hasTeams}
           <td class="team-cell">
