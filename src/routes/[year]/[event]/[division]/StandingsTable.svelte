@@ -14,8 +14,13 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
   <thead>
     <tr>
       <th><span class="rank-label">Rank</span></th>
-      <th>Favourite</th>
-      <th class="name">Name</th>
+      <th>
+        <span class="label-desktop">Favourite</span>
+        <span class="label-mobile">Fave</span>
+      </th>
+      <th class="name">
+        Name<span class="label-mobile">/Team</span>
+      </th>
       {#if hasTeams}
         <th class="team-cell">Team</th>
       {/if}
@@ -37,7 +42,18 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
           </button>
         </td>
         <td class="name">
-          <a href={`${document.URL}/${player.id}`}>{player.name}</a>
+          <p>
+            <a href={`${document.URL}/${player.id}`}>{player.name}</a>
+          </p>
+          <p class="inline-team">
+            {#each getTeamDisplay(player.team) as set}
+              <span
+                title={set ?? 'No Data'}
+                style={Icons.getPokemon(set ?? 'No Data').style}
+              >
+              </span>
+            {/each}
+          </p>
         </td>
         {#if hasTeams}
           <td class="team-cell">
@@ -66,6 +82,18 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
 </table>
 
 <style>
+td p {
+  margin: 0;
+}
+
+.label-mobile, .inline-team {
+  display: none;
+}
+
+.label-desktop {
+  display: inline;
+}
+
 .standings {
   width: 100%;
   margin-bottom: 1rem;
@@ -80,7 +108,7 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
 }
 
 .fave button {
-  padding: 0 2rem;
+  padding: 0 1rem;
   background: none;
   color: inherit;
   border: 0;
@@ -97,9 +125,35 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
   white-space: normal;
 }
 
-@media (max-width: 50rem) {
-  .resistance, .rank-label, .team-cell {
+@media (max-width: 52.5rem) {
+  .label-mobile {
+    display: inline;
+  }
+
+  .label-desktop {
     display: none;
+  }
+
+  .inline-team {
+    display: inline-grid;
+    grid-template-columns: repeat(6, min-content);
+    justify-content: center;
+  }
+
+  .team-cell {
+    display: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .resistance {
+    display: none;
+  }
+}
+
+@media (max-width: 35rem) {
+  .inline-team {
+    grid-template-columns: repeat(3, min-content);
   }
 }
 </style>
