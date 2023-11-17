@@ -153,24 +153,26 @@ function getTournamentStages(rounds, playerCount) {
 
   <p>Resistance: {(100 * player.resistances.opp).toFixed(2)}% <span class="oppopp">({(100 * player.resistances.oppopp).toFixed(2)}%)</span></p>
 
-  <h3>
-    Team
-  </h3>
+  {#if player.team || player.paste}
+    <h3>
+      Team
+    </h3>
 
-  {#if player.team}
-    <p>
-      {#each getTeamDisplay(player.team) as set}
-        <span
-          title={set ?? 'No Data'}
-          style={Icons.getPokemon(set ?? 'No Data').style}
-        >
-        </span>
-      {/each}
-    </p>
-  {/if}
+    {#if player.team}
+      <p>
+        {#each getTeamDisplay(player.team) as set}
+          <span
+            title={set ?? 'No Data'}
+            style={Icons.getPokemon(set ?? 'No Data').style}
+          >
+          </span>
+        {/each}
+      </p>
+    {/if}
 
-  {#if player.paste}
-    <a href={player.paste}>Open Teamlist Paste</a>
+    {#if player.paste}
+      <a href={player.paste}>Open Teamlist Paste</a>
+    {/if}
   {/if}
 
   <h3>
@@ -187,7 +189,10 @@ function getTournamentStages(rounds, playerCount) {
           <th>Round</th>
           <th>Result</th>
           <th>
-            Name<span class="label-mobile">/Team</span>
+            Name
+            {#if stage.rounds.filter(el => el.team).length}
+              <span class="label-mobile">/ Team</span>
+            {/if}
           </th>
           {#if stage.rounds.filter(el => el.team).length}
             <th class="team">Team</th>
