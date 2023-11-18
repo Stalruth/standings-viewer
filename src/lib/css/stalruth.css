@@ -5,6 +5,7 @@
   --color-shadow: #666;
   --color-table: #cd86ff;
   --color-text-secondary: #fff;
+  --color-table-row: #7772;
   font-size: 1.125rem;
 }
 
@@ -21,6 +22,7 @@
     --color-text: #f7f7f7;
     --color-text-secondary: #333;
     --color-bg-secondary: #ccc;
+    --color-table-row: #7772;
   }
 }
 
@@ -64,6 +66,10 @@ table thead {
   color: var(--color-text);
   position: sticky;
   top: -5px;
+}
+
+table tr:nth-child(2n) {
+  background-color: var(--color-table-row);
 }
 
 th {
