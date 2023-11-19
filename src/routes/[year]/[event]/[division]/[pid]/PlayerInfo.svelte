@@ -275,10 +275,6 @@ td p {
   border-radius: 7px;
 }
 
-.player table thead {
-  top: calc(-1rem - 5px);
-}
-
 .oppopp {
   font-size: 0.85em;
 }
