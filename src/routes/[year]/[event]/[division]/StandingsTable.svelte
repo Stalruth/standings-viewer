@@ -29,14 +29,20 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
       {#if hasTeams}
         <th class="team-cell">Team</th>
       {/if}
-      <th>Record</th>
+      <th class="record">Record</th>
       <th class="resistance">Resistance</th>
     </tr>
   </thead>
   <tbody>
     {#each standings as player}
-      <tr class="player">
-        <td>{player.placing}</td>
+      <tr class="player" class:dq={player.placing == 9999}>
+        <td>
+          {#if player.placing === 9999}
+            DQ
+          {:else}
+            {player.placing}
+          {/if}
+        </td>
         <td class="fave">
           <button on:click={getFavouriteHandler(player)}>
             {#if favourites.includes(player)}
@@ -61,7 +67,7 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
             <TeamDisplay team={player.team} />
           </td>
         {/if}
-        <td>
+        <td class="record">
           {player.record.wins}-{player.record.losses}
           {#if player.record.ties !== 0}
             -{player.record.ties}
@@ -118,6 +124,14 @@ td p {
 .name {
   max-width: 12em;
   white-space: normal;
+}
+
+.dq .name a {
+  text-decoration: line-through underline;
+}
+
+.dq .record, .dq .resistance {
+  text-decoration: line-through;
 }
 
 @media (max-width: 52.5rem) {
