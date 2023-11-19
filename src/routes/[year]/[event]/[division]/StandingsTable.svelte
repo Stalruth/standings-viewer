@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Icons } from '@pkmn/img';
 
-import getTeamDisplay from '$lib/getTeamDisplay.ts';
+import TeamDisplay from '$lib/components/TeamDisplay.svelte';
 
 export let standings = [];
 export let getFavouriteHandler = (favourite) => {return (e) => {}};
@@ -52,25 +52,13 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
           </p>
           {#if hasTeams}
             <p class="inline-team">
-              {#each getTeamDisplay(player.team) as set}
-                <span
-                  title={set ?? 'No Data'}
-                  style={Icons.getPokemon(set ?? 'No Data').style}
-                >
-                </span>
-              {/each}
+              <TeamDisplay team={player.team} />
             </p>
           {/if}
         </td>
         {#if hasTeams}
           <td class="team-cell">
-            {#each getTeamDisplay(player.team) as set}
-              <span
-                title={set ?? 'No Data'}
-                style={Icons.getPokemon(set ?? 'No Data').style}
-              >
-              </span>
-            {/each}
+            <TeamDisplay team={player.team} />
           </td>
         {/if}
         <td>

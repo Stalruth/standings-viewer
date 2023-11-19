@@ -1,7 +1,4 @@
 <script lang="ts">
-import { Icons } from '@pkmn/img';
-
-import getTeamDisplay from '$lib/getTeamDisplay.ts';
 import PlayerInfo from './PlayerInfo.svelte';
 
 export let data;

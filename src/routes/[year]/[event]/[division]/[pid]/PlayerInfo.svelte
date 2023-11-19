@@ -1,6 +1,7 @@
  <script lang="ts">
 import { Icons } from '@pkmn/img';
 
+import TeamDisplay from '$lib/components/TeamDisplay.svelte';
 import getTeamDisplay from '$lib/getTeamDisplay.ts';
 
 export let player = {};
@@ -160,18 +161,15 @@ function getTournamentStages(rounds, playerCount) {
 
     {#if player.team}
       <p>
-        {#each getTeamDisplay(player.team) as set}
-          <span
-            title={set ?? 'No Data'}
-            style={Icons.getPokemon(set ?? 'No Data').style}
-          >
-          </span>
-        {/each}
+        {#if player.paste}
+          <a href={player.paste}>
+            <TeamDisplay team={player.team} />
+            (Paste)
+          </a>
+        {:else}
+          <TeamDisplay team={player.team} />
+        {/if}
       </p>
-    {/if}
-
-    {#if player.paste}
-      <a href={player.paste}>Open Teamlist Paste</a>
     {/if}
   {/if}
 
@@ -219,13 +217,7 @@ function getTournamentStages(rounds, playerCount) {
               </p>
               {#if round.team}
                 <p class="inline-team">
-                  {#each getTeamDisplay(round.team) as set}
-                    <span
-                      title={set ?? 'No Data'}
-                      style={Icons.getPokemon(set ?? 'No Data').style}
-                    >
-                    </span>
-                  {/each}
+                  <TeamDisplay team={round.team} />
                 </p>
               {/if}
             {/if}
@@ -260,6 +252,11 @@ h2 {
   margin: 0;
 }
 
+table {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
 td p {
   margin: 0;
 }
@@ -269,9 +266,6 @@ td p {
 }
 
 .player {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   border-radius: 7px;
 }
 
