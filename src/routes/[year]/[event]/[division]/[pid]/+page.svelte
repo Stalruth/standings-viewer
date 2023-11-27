@@ -20,11 +20,15 @@ function getFavouriteHandler(playerId) {
   }
 }
 
+function decountrify(name) {
+  return name.split('[')[0].trim();
+}
+
 </script>
 
 <svelte:head>
-  <title>Player Details: {tournamentInfo.name} - {division[0].toUpperCase()}{division.substring(1)} Division Homemade Standings</title>
-  <meta property="og:title" content="Player Info - {tournamentInfo.name} Homemade Standings" />
+  <title>Player Details: {decountrify(player.name)} - {tournamentInfo.name} Homemade Standings</title>
+  <meta property="og:title" content="Player Details: {decountrify(player.name)} - {tournamentInfo.name} Homemade Standings" />
   <meta property="og:url" content="https://standings.stalruth.dev/" />
   <meta property="og:description" content="Homemade standings for the {tournamentInfo.name}." />
 </svelte:head>
