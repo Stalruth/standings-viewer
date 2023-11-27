@@ -7,6 +7,8 @@ import getTeamDisplay from '$lib/getTeamDisplay.ts';
 export let player = {};
 export let playerCount = 0;
 export let tournamentStatus = '';
+export let favouritesStore: any = undefined;
+export let getFavouriteHandler = (favourite) => {return (e) => {}};
 
 function getMatchResult(result) {
   if (result === 'W') {
@@ -184,8 +186,12 @@ function getTournamentStages(rounds, playerCount) {
       </caption>
       <thead>
         <tr>
-          <th>Round</th>
+          <th class="round">Round</th>
           <th>Result</th>
+          <th>
+            <span class="label-mobile">Fave</span>
+            <span class="label-desktop">Favourite</span>
+          </th>
           <th>
             Name
             {#if stage.rounds.filter(el => el.team).length}
@@ -206,8 +212,17 @@ function getTournamentStages(rounds, playerCount) {
       {/if}
       {#each stage.rounds.reverse() as round}
         <tr>
-          <td>{round.round}</td>
+          <td class="round">{round.round}</td>
           <td>{getMatchResult(round.result)}</td>
+          <td class="fave">
+            <button on:click={getFavouriteHandler(round.id)}>
+              {#if $favouritesStore.includes(round.id)}
+                <span class="faved">★</span>
+              {:else}
+                ☆
+              {/if}
+            </button>
+          </td>
           <td class="name">
             {#if round.id === 0}
               <b>{round.name}</b>
@@ -261,7 +276,7 @@ td p {
   margin: 0;
 }
 
-.label-mobile, .inline-team {
+.inline-team {
   display: none;
 }
 
@@ -274,9 +289,10 @@ td p {
 }
 
 @media (max-width: 52.5rem) {
-  .team {
+  .team, .round {
     display: none;
   }
+
   .inline-team {
     display: inline-grid;
     grid-template-columns: repeat(6, min-content);

@@ -87,12 +87,8 @@ td p {
   margin: 0;
 }
 
-.label-mobile, .inline-team {
+.inline-team {
   display: none;
-}
-
-.label-desktop {
-  display: inline;
 }
 
 .standings {
@@ -104,22 +100,6 @@ td p {
   font-size: 0.85em;
 }
 
-.fave {
-  padding: 0;
-}
-
-.fave button {
-  padding: 0 1rem;
-  background: none;
-  color: inherit;
-  border: 0;
-  margin: 0;
-  font-size: 1.375rem;
-}
-
-.faved {
-  color: #d06f00;
-}
 
 .name {
   max-width: 12em;
@@ -135,13 +115,6 @@ td p {
 }
 
 @media (max-width: 52.5rem) {
-  .label-mobile {
-    display: inline;
-  }
-
-  .label-desktop {
-    display: none;
-  }
 
   .inline-team {
     display: inline-grid;

@@ -1,9 +1,25 @@
 <script lang="ts">
+import { onMount } from 'svelte';
+
+import { getFavouritesStore } from '$lib/favouritesStore.js';
 import PlayerInfo from './PlayerInfo.svelte';
 
 export let data;
 
 $: ({year, eventId, division, tournamentInfo, player} = data);
+
+$: favouritesStore = getFavouritesStore(year, eventId, division);
+
+function getFavouriteHandler(playerId) {
+  return function toggleFavourite(e) {
+    if ($favouritesStore.includes(playerId)) {
+      $favouritesStore = $favouritesStore.filter(el => el !== playerId);
+    } else {
+      $favouritesStore = [...$favouritesStore, playerId];
+    }
+  }
+}
+
 </script>
 
 <svelte:head>
@@ -16,7 +32,7 @@ $: ({year, eventId, division, tournamentInfo, player} = data);
 <h1>{tournamentInfo.name}</h1>
 
 {#if player}
-  <PlayerInfo player={player} playerCount={tournamentInfo.players[division]} tournamentStatus={tournamentInfo.tournamentStatus}/>
+  <PlayerInfo player={player} playerCount={tournamentInfo.players[division]} tournamentStatus={tournamentInfo.tournamentStatus} favouritesStore={favouritesStore} getFavouriteHandler={getFavouriteHandler} />
 {/if}
 
 <style>
