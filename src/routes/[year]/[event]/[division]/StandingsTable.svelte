@@ -56,15 +56,15 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
           <p>
             <a href={`${document.URL}/${player.id}`}>{player.name}</a>
           </p>
-          {#if hasTeams}
+          {#if hasTeams && player.team}
             <p class="inline-team">
-              <TeamDisplay team={player.team} />
+              <TeamDisplay player={player} />
             </p>
           {/if}
         </td>
-        {#if hasTeams}
+        {#if hasTeams && player.team}
           <td class="team-cell">
-            <TeamDisplay team={player.team} />
+            <TeamDisplay player={player} />
           </td>
         {/if}
         <td class="record">
@@ -100,7 +100,6 @@ td p {
   font-size: 0.85em;
 }
 
-
 .name {
   max-width: 12em;
   white-space: normal;
@@ -115,10 +114,13 @@ td p {
 }
 
 @media (max-width: 52.5rem) {
-
   .inline-team {
+    display: block;
+  }
+
+  .inline-team :global(a) {
     display: inline-grid;
-    grid-template-columns: repeat(6, min-content);
+    grid-template-columns: repeat(7, min-content);
     justify-content: center;
   }
 
@@ -134,8 +136,13 @@ td p {
 }
 
 @media (max-width: 35rem) {
-  .inline-team {
-    grid-template-columns: repeat(3, min-content);
+  .inline-team :global(a) {
+    grid-template-columns: repeat(4, min-content);
+  }
+
+  .inline-team :global(a :last-child) {
+    grid-column: 4;
+    grid-row: 1/3;
   }
 }
 </style>

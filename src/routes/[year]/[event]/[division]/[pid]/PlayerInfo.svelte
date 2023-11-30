@@ -162,15 +162,8 @@ function getTournamentStages(rounds, playerCount) {
     </h3>
 
     {#if player.team}
-      <p>
-        {#if player.paste}
-          <a href={player.paste}>
-            <TeamDisplay team={player.team} />
-            (Paste)
-          </a>
-        {:else}
-          <TeamDisplay team={player.team} />
-        {/if}
+      <p class="team-display">
+        <TeamDisplay player={player} />
       </p>
     {/if}
   {/if}
@@ -199,7 +192,7 @@ function getTournamentStages(rounds, playerCount) {
             {/if}
           </th>
           {#if stage.rounds.filter(el => el.team).length}
-            <th class="team">Team</th>
+            <th class="team-cell">Team</th>
           {/if}
           <th>Record</th>
         </tr>
@@ -232,21 +225,15 @@ function getTournamentStages(rounds, playerCount) {
               </p>
               {#if round.team}
                 <p class="inline-team">
-                  <TeamDisplay team={round.team} />
+                  <TeamDisplay player={round} />
                 </p>
               {/if}
             {/if}
           </td>
           {#if stage.rounds.filter(el => el.team).length}
-            <td class="team">
+            <td class="team-cell">
               {#if round.team}
-                {#each getTeamDisplay(round.team) as set}
-                  <span
-                    title={set ?? 'No Data'}
-                    style={Icons.getPokemon(set ?? 'No Data').style}
-                  >
-                  </span>
-                {/each}
+                <TeamDisplay player={round} />
               {/if}
             </td>
           {/if}
@@ -265,6 +252,10 @@ function getTournamentStages(rounds, playerCount) {
 <style>
 h2 {
   margin: 0;
+}
+
+p.team-display {
+  width: max-content;
 }
 
 table {
@@ -288,26 +279,33 @@ td p {
   font-size: 0.85em;
 }
 
+.name {
+  white-space: normal;
+}
+
 @media (max-width: 52.5rem) {
-  .team, .round {
+  .team-cell, .round {
     display: none;
   }
 
   .inline-team {
-    display: inline-grid;
-    grid-template-columns: repeat(6, min-content);
-    justify-content: center;
+    display: block;
   }
 
-  .name {
-    max-width: 12em;
-    white-space: normal;
+  .inline-team :global(a) {
+    display: inline-grid;
+    grid-template-columns: repeat(7, min-content);
+    justify-content: center;
   }
 }
 
 @media (max-width: 35rem) {
-  .inline-team {
-    grid-template-columns: repeat(3, min-content);
+  .inline-team :global(a) {
+    grid-template-columns: repeat(4, min-content);
+  }
+  .inline-team :global(a :last-child) {
+    grid-column: 4;
+    grid-row: 1/3;
   }
 }
 </style>
