@@ -36,7 +36,7 @@ function decountrify(name) {
 <h1>{tournamentInfo.name}</h1>
 
 {#if player}
-  <PlayerInfo player={player} playerCount={tournamentInfo.players[division]} tournamentStatus={tournamentInfo.tournamentStatus} favouritesStore={favouritesStore} getFavouriteHandler={getFavouriteHandler} />
+  <PlayerInfo player={player} roundStructure={tournamentInfo.tournamentStructure[division]} favouritesStore={favouritesStore} getFavouriteHandler={getFavouriteHandler} />
 {/if}
 
 <style>

@@ -5,8 +5,7 @@ import TeamDisplay from '$lib/components/TeamDisplay.svelte';
 import getTeamDisplay from '$lib/getTeamDisplay.ts';
 
 export let player = {};
-export let playerCount = 0;
-export let tournamentStatus = '';
+export let roundStructure = {};
 export let favouritesStore: any = undefined;
 export let getFavouriteHandler = (favourite) => {return (e) => {}};
 
@@ -21,105 +20,49 @@ function getMatchResult(result) {
   return 'Ongoing';
 }
 
-function getPlacingName(position, playerCount) {
-  if (position === 1) {
+function getPlacingName(top) {
+  if (top === 1) {
     return '1st';
-  } else if (position === 2) {
+  } else if (top === 2) {
     return '2nd';
-  } else if (position <= 4) {
-    return 'Top 4';
-  } else if (position <= 8) {
-    return 'Top 8';
-  } else if (position <= 16 && playerCount >= 48) {
-    return 'Top 16';
-  } else if (position <= 32 && playerCount >= 80) {
-    return 'Top 32';
-  } else if (position <= 64 && playerCount >= 128) {
-    return 'Top 64';
-  } else if (position <= 128 && playerCount >= 256) {
-    return 'Top 128';
-  } else if (position <= 256 && playerCount >= 512) {
-    return 'Top 256';
-  } else if (position <= 512 && playerCount >= 1024) {
-    return 'Top 512';
-  } else if (position <= 1024 && playerCount >= 2048) {
-    return 'Top 1024';
   }
-  return '';
+  return `Top ${top}`;
 }
 
-function getTournamentStages(rounds, playerCount) {
-  const roundCounts = {
-    dayOne: 3,
-    dayTwo: 0,
-    topCut: 0
-  };
-
-  if (playerCount >= 800) {
-    roundCounts.dayOne = 9;
-    roundCounts.dayTwo = 6;
-    roundCounts.topCut = 3;
-  } else if (playerCount >= 227) {
-    roundCounts.dayOne = 9;
-    roundCounts.dayTwo = 5;
-    roundCounts.topCut = 3;
-  } else if (playerCount >= 129) {
-    roundCounts.dayOne = 8;
-    roundCounts.dayTwo = 0;
-    roundCounts.topCut = 3;
-  } else if (playerCount >= 65) {
-    roundCounts.dayOne = 7;
-    roundCounts.dayTwo = 0;
-    roundCounts.topCut = 3;
-  } else if (playerCount >= 33) {
-    roundCounts.dayOne = 6;
-    roundCounts.dayTwo = 0;
-    roundCounts.topCut = 3;
-  } else if (playerCount >= 21) {
-    roundCounts.dayOne = 5;
-    roundCounts.dayTwo = 0;
-    roundCounts.topCut = 3;
-  } else if (playerCount >= 13) {
-    roundCounts.dayOne = 5;
-    roundCounts.dayTwo = 0;
-    roundCounts.topCut = 2;
-  } else if (playerCount >= 9) {
-    roundCounts.dayOne = 4;
-    roundCounts.dayTwo = 0;
-    roundCounts.topCut = 2;
-  }
-
+function getTournamentStages(rounds, roundStructure) {
+  console.log(roundStructure);
   const stages = [
     {
-      name: roundCounts.dayTwo === 0 ? 'Swiss' : 'Day One Swiss',
+      name: roundStructure.swissDay2 === 0 ? 'Swiss' : 'Day One Swiss',
       rounds: []
     }
   ];
 
-  if (roundCounts.dayTwo > 0) {
+  if (roundStructure.swissDay2 > 0) {
     stages.push({
       name: 'Day Two Swiss',
       rounds: []
     });
   }
 
-  if (roundCounts.topCut > 0) {
+  if (roundStructure.topCut > 0) {
     stages.push({
       name: 'Top Cut',
       rounds: []
     })
   }
 
-  for (let i of Object.keys(rounds)) {
-    if (Number(i) <= roundCounts.dayOne) {
-      stages[0].rounds.push({round: i, ...rounds[i]});
-    } else if (Number(i) <= roundCounts.dayOne + roundCounts.dayTwo) {
-      stages[1].rounds.push({round: i, ...rounds[i]});
+  for (let i in rounds) {
+    if (Number(i) < roundStructure.swissDay1) {
+      stages[0].rounds.push({round: Number(i)+1, ...rounds[i]});
+    } else if (Number(i) < roundStructure.swissDay1 + roundStructure.swissDay2) {
+      stages[1].rounds.push({round: Number(i)+1, ...rounds[i]});
     } else {
+      console.log(Number(i), roundStructure.swissDay1 + roundStructure.swissDay2 + roundStructure.topCut)
       let roundName = 'Top 8';
-      if (i === `${roundCounts.dayOne + roundCounts.dayTwo + roundCounts.topCut}`) {
+      if (Number(i) === roundStructure.swissDay1 + roundStructure.swissDay2 + roundStructure.topCut - 1) {
         roundName = 'Finals';
-      } else if (i === `${roundCounts.dayOne + roundCounts.dayTwo + roundCounts.topCut - 1}`) {
+      } else if (Number(i) === roundStructure.swissDay1 + roundStructure.swissDay2 + roundStructure.topCut - 2) {
         roundName = 'Top 4';
       }
       stages[stages.length - 1].rounds.push({
@@ -142,8 +85,8 @@ function getTournamentStages(rounds, playerCount) {
     Record
   </h3>
 
-  {#if tournamentStatus === 'finished' && getPlacingName(player.placing, playerCount)}
-    <p>Final placing: {getPlacingName(player.placing, playerCount)}</p>
+  {#if player.top}
+    <p>Final placing: {getPlacingName(player.top)}</p>
   {/if}
 
   <p>Record:
@@ -172,7 +115,7 @@ function getTournamentStages(rounds, playerCount) {
     Schedule
   </h3>
 
-  {#each getTournamentStages(player.rounds, playerCount).reverse() as stage, i}
+  {#each getTournamentStages(player.rounds, roundStructure).reverse() as stage, i}
     <table>
       <caption>
         {stage.name}
