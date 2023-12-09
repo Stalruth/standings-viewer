@@ -3,6 +3,7 @@ import { onMount } from 'svelte';
 
 import { getFavouritesStore } from '$lib/favouritesStore.js';
 import StandingsTable from './StandingsTable.svelte';
+import TopCut from './TopCut.svelte';
 
 export let data;
 let year = data.year;
@@ -18,6 +19,13 @@ let standings = [];
 
 async function getTournamentStandings(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters') {
   const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`);
+  return await response.json();
+}
+
+let topCut = null;
+
+async function getTopCut(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters') {
+  const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/top-cut.json`);
   return await response.json();
 }
 
@@ -38,6 +46,7 @@ function getFavouriteHandler(player) {
 
 onMount(async () => {
   standings = await getTournamentStandings(year, eventId, division);
+  topCut = await getTopCut(year, eventId, division);
   favourites = standings.filter(el => $favouritesStore.includes(el.id));
 });
 </script>
@@ -70,5 +79,24 @@ onMount(async () => {
   <StandingsTable standings={sortedFavourites} getFavouriteHandler={getFavouriteHandler}  favourites={favourites} />
 {/if}
 
+{#if topCut}
+  <details open>
+    <summary class="header">
+      <h2>Top Cut</h2>
+    </summary>
+    <TopCut bracket={topCut.rounds} roundCount={topCut.totalRounds} />
+  </details>
+{/if}
+
 <h2>Standings</h2>
 <StandingsTable standings={standings} getFavouriteHandler={getFavouriteHandler} favourites={favourites} />
+
+<style>
+summary.header {
+  display: block;
+}
+
+summary.header h2 {
+  display: list-item;
+}
+</style>

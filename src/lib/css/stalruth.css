@@ -84,3 +84,7 @@ table thead th:first-child, table tr td:first-child {
 table td {
   padding: 0.3em 0.2em;
 }
+
+s a {
+  text-decoration: line-through underline;
+}
