@@ -13,6 +13,10 @@ import '$lib/css/app.css';
     <dl>
       <dt>Programming and Design</dt>
       <dd><a href="https://stalruth.dev">Stuart Rutherford</a> (<a href="https://github.com/Stalruth/cut-explorer/">GitHub</a>)</dd>
+      <dt>Original Scraper</dt>
+      <dd><a href="https://github.com/JulienGithub">Julien</a></dd>
+      <dt>Team Pastes</dt>
+      <dd><a href="https://twitter.com/VGCPastes">VGC Pastes</a></dd>
       <dt>Favicon</dt>
       <dd><a href="https://github.com/twitter/twemoji">Twemoji by Twitter</a></dd>
     </dl>
