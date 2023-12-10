@@ -4,7 +4,6 @@ export let roundCount = 0;
 
 function getRoundName(roundNumber, roundCount) {
   const roundsLeft = roundCount - roundNumber;
-  console.log(roundCount, roundNumber, roundsLeft);
   if(roundsLeft == 1) {
     return 'Finals';
   }
@@ -20,7 +19,7 @@ function getRoundName(roundNumber, roundCount) {
         {#each round as game}
           <article class="game">
             {#each game.players as player, i}
-              {#if game.winner !== i}
+              {#if game.winner !== i && game.winner !== null}
                 <p>
                   <s>
                     <a href={`${document.URL}/${player.id}`}>
