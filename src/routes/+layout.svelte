@@ -2,8 +2,20 @@
 import 'mvp.css';
 import '$lib/css/stalruth.css';
 import '$lib/css/app.css';
+import { page } from '$app/stores';
 </script>
 
+{#if $page.route.id !== '/'}
+  <header>
+    <nav>
+      <ul>
+        <li>
+          <a href="/">Index</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+{/if}
 <main>
 <slot></slot>
 </main>
@@ -22,3 +34,15 @@ import '$lib/css/app.css';
     </dl>
   </details>
 </footer>
+
+<style>
+header {
+  padding-bottom: 0;
+}
+nav {
+  margin-bottom: 0;
+}
+main {
+  padding-top: 0;
+}
+</style>
