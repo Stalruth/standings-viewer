@@ -36,7 +36,6 @@ onMount(async () => {
 </script>
 
 <svelte:head>
-  <link rel="preload" href="https://standings.stalruth.dev/sprites/pokemonicons-sheet.png" as="image" crossorigin />
   <title>{tournamentInfo.name} - {division[0].toUpperCase()}{division.substring(1)} Division Homemade Standings</title>
   <meta property="og:title" content="{tournamentInfo.name} Homemade Standings" />
   <meta property="og:url" content="https://standings.stalruth.dev/" />
