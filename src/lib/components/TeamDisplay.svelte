@@ -12,7 +12,7 @@ $: paste = player.paste ?? "";
   {#each getTeamDisplay(team) as set}
     <span
       title={set ?? 'No Data'}
-      style={Icons.getPokemon(set ?? 'No Data', {scheme: 'https', domain: 'api.standings.stalruth.dev'}).style}
+      style={Icons.getPokemon(set ?? 'No Data', {scheme: 'https', domain: 'standings.stalruth.dev'}).style}
     >
     </span>
   {/each}<span>⎘</span>

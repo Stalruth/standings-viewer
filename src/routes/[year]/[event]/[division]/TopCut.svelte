@@ -1,4 +1,6 @@
 <script lang="ts">
+import { page } from '$app/stores';
+
 export let bracket = [];
 export let roundCount = 0;
 
@@ -22,14 +24,14 @@ function getRoundName(roundNumber, roundCount) {
               {#if game.winner !== i && game.winner !== null}
                 <p>
                   <s>
-                    <a href={`${document.URL}/${player.id}`}>
+                    <a href={`${$page.url}/${player.id}`}>
                       {player.name}
                     </a>
                   </s>
                 </p>
               {:else}
                 <p>
-                  <a href={`${document.URL}/${player.id}`}>
+                  <a href={`${$page.url}/${player.id}`}>
                     {player.name}
                   </a>
                 </p>

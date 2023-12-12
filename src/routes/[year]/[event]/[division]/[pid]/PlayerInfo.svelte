@@ -30,7 +30,6 @@ function getPlacingName(top) {
 }
 
 function getTournamentStages(rounds, roundStructure) {
-  console.log(roundStructure);
   const stages = [
     {
       name: roundStructure.swissDay2 === 0 ? 'Swiss' : 'Day One Swiss',
@@ -58,7 +57,6 @@ function getTournamentStages(rounds, roundStructure) {
     } else if (Number(i) < roundStructure.swissDay1 + roundStructure.swissDay2) {
       stages[1].rounds.push({round: Number(i)+1, ...rounds[i]});
     } else {
-      console.log(Number(i), roundStructure.swissDay1 + roundStructure.swissDay2 + roundStructure.topCut)
       let roundName = 'Top 8';
       if (Number(i) === roundStructure.swissDay1 + roundStructure.swissDay2 + roundStructure.topCut - 1) {
         roundName = 'Finals';

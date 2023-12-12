@@ -2,32 +2,18 @@
 import { onMount } from 'svelte';
 
 import { getFavouritesStore } from '$lib/favouritesStore.js';
+import { getTournamentStandings, getTopCut } from '$lib/getData.js';
 import StandingsTable from './StandingsTable.svelte';
 import TopCut from './TopCut.svelte';
 
 export let data;
-let year = data.year;
-let eventId = data.eventId;
-let division = data.division;
 $: year = data.year;
 $: eventId = data.eventId;
 $: division = data.division;
 $: tournamentInfo = data.tournamentInfo;
 $: lastUpdated = new Date(tournamentInfo.lastUpdated);
-
-let standings = [];
-
-async function getTournamentStandings(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters') {
-  const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`);
-  return await response.json();
-}
-
-let topCut = null;
-
-async function getTopCut(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters') {
-  const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/top-cut.json`);
-  return await response.json();
-}
+$: standings = data.standings;
+$: topCut = data.topCut;
 
 let favourites = [];
 let favouritesStore = getFavouritesStore(year, eventId, division);
@@ -45,14 +31,12 @@ function getFavouriteHandler(player) {
 }
 
 onMount(async () => {
-  standings = await getTournamentStandings(year, eventId, division);
-  topCut = await getTopCut(year, eventId, division);
   favourites = standings.filter(el => $favouritesStore.includes(el.id));
 });
 </script>
 
 <svelte:head>
-  <link rel="preload" href={`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/standings.json`} as="fetch" crossorigin />
+  <link rel="preload" href="https://standings.stalruth.dev/sprites/pokemonicons-sheet.png" as="image" crossorigin />
   <title>{tournamentInfo.name} - {division[0].toUpperCase()}{division.substring(1)} Division Homemade Standings</title>
   <meta property="og:title" content="{tournamentInfo.name} Homemade Standings" />
   <meta property="og:url" content="https://standings.stalruth.dev/" />

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { Icons } from '@pkmn/img';
 
+import { page } from '$app/stores';
 import TeamDisplay from '$lib/components/TeamDisplay.svelte';
 
 export let standings = [];
@@ -54,7 +55,7 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
         </td>
         <td class="name">
           <p>
-            <a href={`${document.URL}/${player.id}`}>{player.name}</a>
+            <a href={`${$page.url}/${player.id}`}>{player.name}</a>
           </p>
           {#if hasTeams && player.team}
             <p class="inline-team">

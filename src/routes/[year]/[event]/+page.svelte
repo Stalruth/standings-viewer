@@ -4,12 +4,6 @@ const year = data.year;
 const eventId = data.eventId;
 const tournamentInfo = data.tournamentInfo;
 const showWinners = tournamentInfo?.winners?.juniors || tournamentInfo?.winners?.seniors || tournamentInfo?.winners?.masters;
-
-async function getTournamentInfo(year: string, eventId: string) {
-  const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/tournament.json`);
-  return await response.json();
-}
-
 </script>
 
 <svelte:head>
