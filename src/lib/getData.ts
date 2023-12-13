@@ -19,7 +19,11 @@ async function getTopCut(year: string, eventId: string, division: 'juniors' | 's
     fetch = window.fetch;
   }
   const response = await fetch(`https://api.standings.stalruth.dev/${year}/${eventId}/${division.toLowerCase()}/top-cut.json`);
-  return await response.json();
+  if(response.ok) {
+    return await response.json();
+  } else {
+    return null;
+  }
 }
 
 async function getPlayerInfo(year: string, eventId: string, division: 'juniors' | 'seniors' | 'masters', player: Number, fetch: Function) {
