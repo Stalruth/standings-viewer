@@ -16,7 +16,7 @@ $: topCut = data.topCut;
 
 let standings = [];
 let favourites = [];
-let favouritesStore = getFavouritesStore(year, eventId, division);
+$: favouritesStore = getFavouritesStore(year, eventId, division);
 $: sortedFavourites = standings.filter(el => favourites.includes(el));
 
 function getFavouriteHandler(player) {
