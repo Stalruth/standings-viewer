@@ -23,12 +23,12 @@ $: hasTeams = standings.filter(el => !!el.team).length > 0;
         Name
         {#if hasTeams}
           <span class="label-mobile">
-            / Team
+            / Team Link
           </span>
         {/if}
       </th>
       {#if hasTeams}
-        <th class="team-cell">Team</th>
+        <th class="team-cell">Team Link</th>
       {/if}
       <th class="record">Record</th>
       <th class="resistance">Resistance</th>
