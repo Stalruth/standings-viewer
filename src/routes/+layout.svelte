@@ -5,20 +5,25 @@ import '$lib/css/app.css';
 import { page } from '$app/stores';
 </script>
 
-{#if $page.route.id !== '/'}
-  <header>
-    <nav>
-      <ul>
-        <li>
-          <a href="/">Index</a>
-        </li>
-      </ul>
-    </nav>
-  </header>
-{/if}
+<header>
+  <nav>
+    <p>
+      {#each $page.data.breadcrumbs as breadcrumb, i}
+        {#if i + 1 < $page.data.breadcrumbs.length}
+          <a href={breadcrumb.href}>{breadcrumb.title}</a>
+          &nbsp;/&nbsp;
+        {:else}
+          {breadcrumb.title}
+        {/if}
+      {/each}
+    </p>
+  </nav>
+</header>
+
 <main>
-<slot></slot>
+  <slot></slot>
 </main>
+
 <footer>
   <details>
     <summary>Credits</summary>
@@ -38,9 +43,13 @@ import { page } from '$app/stores';
 <style>
 header {
   padding-bottom: 0;
+  text-align: left;
 }
 nav {
   margin-bottom: 0;
+}
+nav ul :first-child {
+  margin-left: 0;
 }
 main {
   padding-top: 0;
