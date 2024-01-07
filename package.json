@@ -29,7 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@pkmn/img": "^0.2.18",
+		"@pkmn/img": "^0.2.22",
 		"@sveltejs/adapter-netlify": "^2.0.8",
 		"mvp.css": "^1.14.0",
 		"svelte-persisted-store": "^0.7.0"
