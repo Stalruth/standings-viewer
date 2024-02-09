@@ -13,8 +13,8 @@ $: division = data.division;
 $: tournamentInfo = data.tournamentInfo;
 $: lastUpdated = new Date(tournamentInfo.lastUpdated);
 $: topCut = data.topCut;
+$: standings = data.standings;
 
-let standings = [];
 let favourites = [];
 $: favouritesStore = getFavouritesStore(year, eventId, division);
 $: sortedFavourites = standings.filter(el => favourites.includes(el));
@@ -31,7 +31,6 @@ function getFavouriteHandler(player) {
 }
 
 onMount(async () => {
-  standings = await getTournamentStandings(year, eventId, division);
   favourites = standings.filter(el => $favouritesStore.includes(el.id));
 });
 </script>
